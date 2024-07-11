@@ -4,3 +4,10 @@ spring:
     url: jdbc:mysql://localhost:3306/techstore?useTimezone=true&serverTimezone=UTC
     username: root
     password: 153426
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: false
