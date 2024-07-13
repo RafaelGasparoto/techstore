@@ -15,4 +15,8 @@ public class OrderedServices {
     public Ordered findOrderedById(Long orderedId) {
         return this.orderedRepository.findById(orderedId).orElseThrow(() -> new ResourceAccessException("Pedido não encontrado"));
     }
+
+    public Ordered createOrdered(Ordered ordered) {
+        return this.orderedRepository.save(ordered);
+    }
 }

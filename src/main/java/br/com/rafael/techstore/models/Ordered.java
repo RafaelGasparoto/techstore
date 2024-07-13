@@ -16,7 +16,7 @@ public class Ordered {
 
     @Column(name = "user_id", nullable = false)
     private Integer userId;
-    
+
     @Column(name = "quantity_itens")
     private Integer quantityItens;
 
@@ -25,4 +25,24 @@ public class Ordered {
 
     @Column(name = "total")
     private float total;
+
+    public Long getId() {
+        return id;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public Integer getQuantityItens() {
+        return quantityItens;
+    }
+
+    public float getDiscount() {
+        return discount;
+    }
+
+    public float getTotal() {
+        return total;
+    }
 }
