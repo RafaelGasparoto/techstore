@@ -33,10 +33,33 @@ public class OrderedController {
     OrderedItemServices orderedItemServices;
 
     @GetMapping(value = "/{id}")
-    ResponseEntity<OrderedDto> findOrderedById(@PathVariable(value = "id") Long orderId) {
-        Ordered ordered = orderedServices.findOrderedById(orderId);
-        OrderedDto orderedDto = buildOrderedDto(ordered);
-        return ResponseEntity.ok(orderedDto);
+    ResponseEntity<Object> findOrderedById(@PathVariable(value = "id") Long orderId) {
+        try {
+            Ordered ordered = orderedServices.findOrderedById(orderId);
+            OrderedDto orderedDto = buildOrderedDto(ordered);
+            return ResponseHandlerDto.createResponse("Pedido encontrado", HttpStatus.OK, orderedDto);
+        } catch (Exception e) {
+            return ResponseHandlerDto.createResponse(e.getMessage(), HttpStatus.NOT_FOUND,
+                    null);
+        }
+    }
+
+    @GetMapping(value = "/{id}/items")
+    ResponseEntity<Object> findOrderedWithItems(@PathVariable(value = "id") Long orderId) {
+        OrderedWithItemsDto orderedWithItemsDto = null;
+
+        try {
+            Ordered ordered = orderedServices.findOrderedById(orderId);
+            List<OrderedItemDto> listOrderedItems = buildListOrderedItemDto(
+                    orderedItemServices.findByOrderedId(orderId));
+            orderedWithItemsDto = buildOrderedWithItemsDto(ordered);
+            orderedWithItemsDto.setListOrderedItemDtos(listOrderedItems);
+        } catch (Exception e) {
+            return ResponseHandlerDto.createResponse(e.getMessage(), HttpStatus.NOT_FOUND,
+                    null);
+        }
+
+        return ResponseHandlerDto.createResponse("Pedido encontrado", HttpStatus.OK, orderedWithItemsDto);
     }
 
     @PostMapping()
