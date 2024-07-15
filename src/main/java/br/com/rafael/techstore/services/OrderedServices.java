@@ -13,10 +13,16 @@ public class OrderedServices {
     OrderedRepository orderedRepository;
 
     public Ordered findOrderedById(Long orderedId) {
-        return this.orderedRepository.findById(orderedId).orElseThrow(() -> new ResourceAccessException("Pedido não encontrado"));
+        return this.orderedRepository.findById(orderedId)
+                .orElseThrow(() -> new ResourceAccessException("Pedido não encontrado"));
     }
 
     public Ordered createOrdered(Ordered ordered) {
         return this.orderedRepository.save(ordered);
     }
+
+    public void deleteOrderedById(Long orderedId) {
+        this.orderedRepository.deleteById(orderedId);
+    }
+
 }

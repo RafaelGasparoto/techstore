@@ -14,7 +14,15 @@ public class OrderedItemServices {
     @Autowired
     OrderedItemRepository orderedItemRepository;
 
-    List<OrderedItem> findByOrderedId(Long orderedId) {
+    public List<OrderedItem> findByOrderedId(Long orderedId) {
         return this.orderedItemRepository.findByOrderedId(orderedId);
+    }
+
+    public List<OrderedItem> saveListOrderedItems(List<OrderedItem> listOrderedItems) {
+        return this.orderedItemRepository.saveAll(listOrderedItems);
+    }
+
+    public void deleteListOrderedById(List<Long> listOrderedId) {
+        this.orderedItemRepository.deleteAllById(listOrderedId);
     }
 }

@@ -34,13 +34,13 @@ public class ProductController {
         Direction orderDirection = order.equalsIgnoreCase("ASC") ? Direction.ASC : Direction.DESC;
         Pageable pageable = PageRequest.of(page, offSet, Sort.by(orderDirection, "name"));
 
-        PageResponseDto pageResponseDto = null;
         var response = productServices.findAll(pageable);
 
         if (response != null)
-            pageResponseDto = this.buildPageResponse(response);
-
-        return ResponseEntity.ok(pageResponseDto);
+            return ResponseEntity.ok(this.buildPageResponse(response));
+        else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     PageResponseDto buildPageResponse(Page<Product> response) {

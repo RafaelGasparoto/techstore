@@ -1,8 +1,9 @@
 package br.com.rafael.techstore.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
-public class OrderedDto implements Serializable {
+public class OrderedWithItemsDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -10,15 +11,19 @@ public class OrderedDto implements Serializable {
     private Integer quantityItens;
     private float discount;
     private float total;
+    private List<OrderedItemDto> listOrderedItemDtos;
 
-    public OrderedDto(){}
+    public OrderedWithItemsDto() {
+    }
 
-    public OrderedDto(Long id, Integer userId, Integer quantityItens, float discount, float total) {
+    public OrderedWithItemsDto(Long id, Integer userId, Integer quantityItens, float discount, float total,
+            List<OrderedItemDto> listOrderedItemDtos) {
         this.id = id;
         this.userId = userId;
         this.quantityItens = quantityItens;
         this.discount = discount;
         this.total = total;
+        this.listOrderedItemDtos = listOrderedItemDtos;
     }
 
     public Long getId() {
@@ -59,6 +64,14 @@ public class OrderedDto implements Serializable {
 
     public void setTotal(float total) {
         this.total = total;
+    }
+
+    public List<OrderedItemDto> getListOrderedItemDtos() {
+        return listOrderedItemDtos;
+    }
+
+    public void setListOrderedItemDtos(List<OrderedItemDto> listOrderedItemDtos) {
+        this.listOrderedItemDtos = listOrderedItemDtos;
     }
 
 }
