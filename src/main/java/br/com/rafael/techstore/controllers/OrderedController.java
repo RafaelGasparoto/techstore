@@ -1,6 +1,7 @@
 package br.com.rafael.techstore.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import br.com.rafael.techstore.dto.OrderedDto;
 import br.com.rafael.techstore.dto.OrderedItemDto;
 import br.com.rafael.techstore.dto.OrderedWithItemsDto;
+import br.com.rafael.techstore.dto.ResponseHandlerDto;
 import br.com.rafael.techstore.models.Ordered;
 import br.com.rafael.techstore.models.OrderedItem;
 import br.com.rafael.techstore.services.OrderedItemServices;
@@ -38,7 +40,7 @@ public class OrderedController {
     }
 
     @PostMapping()
-    public ResponseEntity<OrderedWithItemsDto> createOrdered(@RequestBody() OrderedWithItemsDto orderedWithItemsDto) {
+    public ResponseEntity<Object> createOrdered(@RequestBody() OrderedWithItemsDto orderedWithItemsDto) {
         Ordered ordered = buildOrdered(orderedWithItemsDto);
         List<OrderedItem> listOrderedItems = new ArrayList<OrderedItem>();
 
@@ -49,16 +51,18 @@ public class OrderedController {
                 orderedItemDto.setOrderedId(ordered.getId());
                 listOrderedItems.add(buildOrderedItem(orderedItemDto));
             }
-            orderedWithItemsDto.setListOrderedItemDtos(buildListOrderedItemDto(orderedItemServices.saveListOrderedItems(listOrderedItems)));
+            orderedWithItemsDto.setListOrderedItemDtos(
+                    buildListOrderedItemDto(orderedItemServices.saveListOrderedItems(listOrderedItems)));
         } catch (Exception e) {
-            List<Long> listOrderedId = new ArrayList<Long>();
-            listOrderedItems.forEach((orderedItem) -> listOrderedId.add(orderedItem.getId()));
-            orderedItemServices.deleteListOrderedById(listOrderedId);
+            List<Long> listOrderedItemId = new ArrayList<Long>();
+            listOrderedItems.forEach((orderedItem) -> listOrderedItemId.add(orderedItem.getId()));
+            orderedItemServices.deleteOrderedItemsByListId(listOrderedItemId);
             orderedServices.deleteOrderedById(orderedWithItemsDto.getId());
-            orderedWithItemsDto = null;
+            return ResponseHandlerDto.createResponse("Erro ao criar pedido: " + e.getMessage(), HttpStatus.BAD_REQUEST,
+                    null);
         }
 
-        return ResponseEntity.ok(orderedWithItemsDto);
+        return ResponseHandlerDto.createResponse("Pedido criado com sucesso!", HttpStatus.CREATED, orderedWithItemsDto);
     }
 
     Ordered buildOrdered(OrderedWithItemsDto orderedWithItemsDto) {
@@ -76,6 +80,7 @@ public class OrderedController {
     OrderedWithItemsDto buildOrderedWithItemsDto(Ordered ordered) {
         return DozerMapper.parseObject(ordered, OrderedWithItemsDto.class);
     }
+
     List<OrderedItemDto> buildListOrderedItemDto(List<OrderedItem> listItems) {
         return DozerMapper.parseListObject(listItems, OrderedItemDto.class);
     }

@@ -22,7 +22,7 @@ public class OrderedItemServices {
         return this.orderedItemRepository.saveAll(listOrderedItems);
     }
 
-    public void deleteListOrderedById(List<Long> listOrderedId) {
+    public void deleteOrderedItemsByListId(List<Long> listOrderedId) {
         this.orderedItemRepository.deleteAllById(listOrderedId);
     }
 }
