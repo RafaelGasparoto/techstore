@@ -3,6 +3,7 @@ package br.com.rafael.techstore.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,8 @@ import br.com.rafael.techstore.models.OrderedItem;
 import br.com.rafael.techstore.services.OrderedItemServices;
 import br.com.rafael.techstore.services.OrderedServices;
 import br.com.rafael.techstore.mapper.DozerMapper;
+
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -63,9 +66,18 @@ public class OrderedController {
     }
 
     @PostMapping()
-    public ResponseEntity<Object> createOrdered(@RequestBody() OrderedWithItemsDto orderedWithItemsDto) {
+    public ResponseEntity<Object> createOrdered(@Valid @RequestBody() OrderedWithItemsDto orderedWithItemsDto, BindingResult bindingResult) {
         Ordered ordered = buildOrdered(orderedWithItemsDto);
         List<OrderedItem> listOrderedItems = new ArrayList<OrderedItem>();
+
+        if (bindingResult.hasErrors()) {
+            StringBuilder errorMessage = new StringBuilder();
+            bindingResult.getAllErrors().forEach(error -> {
+                errorMessage.append(error.getDefaultMessage()).append("; ");
+            });
+
+            return ResponseHandlerDto.createResponse(errorMessage.toString(), HttpStatus.BAD_REQUEST, null);
+        }
 
         try {
             orderedWithItemsDto.setId(orderedServices.createOrdered(ordered).getId());

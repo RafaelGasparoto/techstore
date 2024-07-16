@@ -2,6 +2,15 @@ package br.com.rafael.techstore.dto;
 
 import java.io.Serializable;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderedDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -10,55 +19,4 @@ public class OrderedDto implements Serializable {
     private Integer quantityItens;
     private float discount;
     private float total;
-
-    public OrderedDto(){}
-
-    public OrderedDto(Long id, Integer userId, Integer quantityItens, float discount, float total) {
-        this.id = id;
-        this.userId = userId;
-        this.quantityItens = quantityItens;
-        this.discount = discount;
-        this.total = total;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getQuantityItens() {
-        return quantityItens;
-    }
-
-    public void setQuantityItens(Integer quantityItens) {
-        this.quantityItens = quantityItens;
-    }
-
-    public float getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(float discount) {
-        this.discount = discount;
-    }
-
-    public float getTotal() {
-        return total;
-    }
-
-    public void setTotal(float total) {
-        this.total = total;
-    }
-
 }
